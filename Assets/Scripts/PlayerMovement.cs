@@ -5,15 +5,15 @@ public class PlayerMovement : MonoBehaviour
 {
     // Movement settings
     [Header("Movement settings")]
-    [SerializeField] private float maxSpeed = 3f;
-    [SerializeField] private float accelerationFroce = 1.5f;
-    [SerializeField] private float drag = 0.5f;
+    [SerializeField] private float maxSpeed = 12f;
+    [SerializeField] private float accelerationFroce = 5f;
     
     private Rigidbody2D rb;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.linearDamping= drag;
+        rb.mass = 2;
+        rb.linearDamping= 4f;
         rb.freezeRotation = true;
     }
 
@@ -23,12 +23,7 @@ public class PlayerMovement : MonoBehaviour
         // get inputs
         float moveHorizontal = Input.GetAxis("Horizontal");
 
-        // stop player if he doesn't press anything
-        if (moveHorizontal < 0.01f && moveHorizontal > -0.01f)
-        {
-            Vector2 force = new Vector2(0, 0);
-            rb.AddForce(force);
-        }
+
         // if player's speed is less than the max speed allowed
         if (rb.linearVelocity.magnitude < maxSpeed)
         {
