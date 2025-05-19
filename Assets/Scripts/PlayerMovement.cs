@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSpeed;
     [SerializeField] private float accelerationFroce;
     
+    private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
     void Start()
     {
@@ -17,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
         rb.mass = 2f;
         rb.linearDamping= 3f;
         rb.freezeRotation = true;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -35,6 +37,14 @@ public class PlayerMovement : MonoBehaviour
             //move player
             rb.AddForce(force);
         }
-        
+        // Turn the character based on his direction of movement
+        if (rb.linearVelocity[0] < 0.00f)
+        {
+            spriteRenderer.flipX = true;
+        }
+        else
+        {
+            spriteRenderer.flipX = false;
+        }
     }
 }
