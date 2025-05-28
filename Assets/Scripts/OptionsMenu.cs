@@ -6,6 +6,7 @@ public class OptionsMenu : MonoBehaviour
     [Header("References")]
     public GameObject mainMenuPanel;
     public GameObject optionsPanel;
+    public GameObject levelsPanel;
     public Toggle musicToggle;
     public AudioSource backgroundMusic;
 
@@ -25,6 +26,18 @@ public class OptionsMenu : MonoBehaviour
     public void CloseOptions()
     {
         optionsPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
+    }
+    
+    public void OpenLevels()
+    {
+        mainMenuPanel.SetActive(false);
+        levelsPanel.SetActive(true);
+    }
+
+    public void CloseLevels()
+    {
+        levelsPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
     }
 
