@@ -15,20 +15,20 @@ public class PlayerAnimation : MonoBehaviour
         if (rb.linearVelocity[1] > 0.00f || rb.linearVelocity[1] < -0.00f)
         { 
             anim.SetBool("isJumping", true);
-            anim.SetBool("isStopping", false);
-            anim.SetBool("isRunning", false);
         }
-        else if (rb.linearVelocity[0] > 0.00f || rb.linearVelocity[0] < -0.00f)
+        if(rb.linearVelocity[1] == 0.00f)
+        {
+            anim.SetBool("isJumping", false);
+        }
+        if (rb.linearVelocity[0] > 0.00f || rb.linearVelocity[0] < -0.00f)
         {
             if (moveHorizontal > 0.25 || moveHorizontal < -0.25)
             {
-                anim.SetBool("isJumping", false);
                 anim.SetBool("isStopping", false);
                 anim.SetBool("isRunning", true);
             }
             else
             {
-                anim.SetBool("isJumping", false);
                 anim.SetBool("isStopping", true);
                 anim.SetBool("isRunning", false);
             }
