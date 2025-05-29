@@ -10,7 +10,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float maxSpeed;
     [SerializeField] private float accelerationForce;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float groundCheckDistance;
     
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
@@ -19,8 +18,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         // player stats
-        maxSpeed = 6f;
-        accelerationForce = 1f;
+        maxSpeed = 12f;
+        accelerationForce = 6f;
         jumpForce = 15f;
         // physics setup
         rb = GetComponent<Rigidbody2D>();
@@ -40,9 +39,8 @@ public class PlayerMovement : MonoBehaviour
         // get inputs
         float moveHorizontal = Input.GetAxis("Horizontal");
 
-
         // if player's speed is less than the max speed allowed
-        if (rb.linearVelocity.magnitude < maxSpeed && moveHorizontal > 0.25 || moveHorizontal < -0.25)
+        if (rb.linearVelocity.magnitude < maxSpeed && (moveHorizontal > 0.25 || moveHorizontal < -0.25))
         {
             //set the player vector
             Vector2 force = new Vector2(moveHorizontal, 0).normalized * accelerationForce;
