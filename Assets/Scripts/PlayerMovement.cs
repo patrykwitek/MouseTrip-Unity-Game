@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     // Movement settings
     [Header("Movement settings")]
-    [SerializeField] private float maxSpeed;
+    [SerializeField] public float maxSpeed;
     [SerializeField] private float accelerationForce;
     [SerializeField] private float jumpForce;
     
