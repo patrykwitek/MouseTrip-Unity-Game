@@ -4,23 +4,23 @@ using UnityEngine.UI;
 public class TutorialTrigger : MonoBehaviour
 {
     [Header("Ustawienia")]
-    public Sprite tutorialImage; // Przeciągnij tutaj swój PNG z instrukcją
-    public float freezeTimeScale = 0.05f; // Wartość "zamrożenia" gry
-    public KeyCode unlockKey = KeyCode.Space; // Klawisz do kontynuacji
+    public Sprite tutorialImage;
+    public float freezeTimeScale = 0.05f;
+    public KeyCode unlockKey = KeyCode.Space;
 
     [Header("Referencje")]
-    public Image tutorialDisplay; // UI Image do wyświetlania instrukcji
-    public GameObject player; // Referencja do obiektu gracza
+    public Image tutorialDisplay;
+    public GameObject player;
 
     private bool isTutorialActive = false;
-    private PlayerMovement playerMovement; // Zakładając, że masz skrypt PlayerMovement
+    private PlayerMovement playerMovement;
 
+    [SerializeField] private AudioClip messageSound;
+    
     private void Start()
     {
-        // Wyłącz obraz na starcie
         tutorialDisplay.gameObject.SetActive(false);
         
-        // Pobierz komponent PlayerMovement
         if (player != null)
         {
             playerMovement = player.GetComponent<PlayerMovement>();
@@ -45,14 +45,13 @@ public class TutorialTrigger : MonoBehaviour
 
     private void FreezeGame()
     {
-        // Zamroź czas gry
         Time.timeScale = freezeTimeScale;
         
-        // Wyświetl instrukcję
         tutorialDisplay.sprite = tutorialImage;
         tutorialDisplay.gameObject.SetActive(true);
         
-        // Zablokuj ruch postaci
+        AudioSource.PlayClipAtPoint(messageSound, transform.position);
+        
         if (playerMovement != null)
         {
             playerMovement.enabled = false;
@@ -63,13 +62,10 @@ public class TutorialTrigger : MonoBehaviour
 
     private void UnfreezeGame()
     {
-        // Przywróć normalny czas gry
         Time.timeScale = 1f;
-        
-        // Ukryj instrukcję
+
         tutorialDisplay.gameObject.SetActive(false);
-        
-        // Odblokuj ruch postaci
+
         if (playerMovement != null)
         {
             playerMovement.enabled = true;
@@ -77,7 +73,6 @@ public class TutorialTrigger : MonoBehaviour
         
         isTutorialActive = false;
         
-        // Opcjonalnie: deaktywuj ten trigger aby się nie powtarzał
         gameObject.SetActive(false);
     }
 }

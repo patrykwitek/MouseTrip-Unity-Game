@@ -1,0 +1,44 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class PointsManager : MonoBehaviour
+{
+    public static PointsManager Instance;
+    
+    [SerializeField] private TextMeshProUGUI  counterText;
+    private int totalCollectibles;
+    private int collectedCount;
+    
+    private void Awake()
+    {
+        if (Instance is null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
+        totalCollectibles = GameObject.FindGameObjectsWithTag("Cheese").Length;
+        UpdateCounter();
+    }
+    
+    public void CollectItem()
+    {
+        collectedCount += 1;
+        UpdateCounter();
+    }
+
+    public void AddToTotalCollectibles(int amount)
+    {
+        totalCollectibles += amount;
+        UpdateCounter();
+    }
+    
+    private void UpdateCounter()
+    { 
+        counterText.text = $"{collectedCount} / {totalCollectibles}";
+    }
+}

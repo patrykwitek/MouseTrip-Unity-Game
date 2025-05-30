@@ -18,8 +18,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         // player stats
-        maxSpeed = 12f;
-        accelerationForce = 6f;
+        maxSpeed = 3f;
+        accelerationForce = 4f;
         jumpForce = 15f;
         // physics setup
         rb = GetComponent<Rigidbody2D>();
