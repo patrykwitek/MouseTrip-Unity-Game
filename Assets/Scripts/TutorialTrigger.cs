@@ -3,27 +3,28 @@ using UnityEngine.UI;
 
 public class TutorialTrigger : MonoBehaviour
 {
-    [Header("Ustawienia")]
-    public Sprite tutorialImage;
+    [Header("Ustawienia")] public Sprite tutorialImage;
     public float freezeTimeScale = 0.05f;
     public KeyCode unlockKey = KeyCode.Space;
 
-    [Header("Referencje")]
-    public Image tutorialDisplay;
+    [Header("Referencje")] public Image tutorialDisplay;
     public GameObject player;
+    [SerializeField] private AudioClip messageSound;
 
     private bool isTutorialActive = false;
     private PlayerMovement playerMovement;
+    private Rigidbody2D playerRigidbody;
+    private Vector2 savedVelocity;
+    private float savedAngularVelocity;
 
-    [SerializeField] private AudioClip messageSound;
-    
     private void Start()
     {
         tutorialDisplay.gameObject.SetActive(false);
-        
+
         if (player != null)
         {
             playerMovement = player.GetComponent<PlayerMovement>();
+            playerRigidbody = player.GetComponent<Rigidbody2D>();
         }
     }
 
@@ -45,34 +46,69 @@ public class TutorialTrigger : MonoBehaviour
 
     private void FreezeGame()
     {
+        // Zapisanie aktualnej prędkości przed zatrzymaniem
+        if (playerRigidbody != null)
+        {
+            savedVelocity = playerRigidbody.linearVelocity;
+            savedAngularVelocity = playerRigidbody.angularVelocity;
+            playerRigidbody.isKinematic = true;
+        }
+
+        // Zatrzymanie czasu i inputu
         Time.timeScale = freezeTimeScale;
-        
-        tutorialDisplay.sprite = tutorialImage;
-        tutorialDisplay.gameObject.SetActive(true);
-        
-        AudioSource.PlayClipAtPoint(messageSound, transform.position);
-        
+        Time.fixedDeltaTime = 0.02f * Time.timeScale; // ważne dla fizyki
+
         if (playerMovement != null)
         {
             playerMovement.enabled = false;
         }
-        
+
+        // Wyświetlenie komunikatu
+        tutorialDisplay.sprite = tutorialImage;
+        tutorialDisplay.gameObject.SetActive(true);
+
+        if (messageSound != null)
+        {
+            AudioSource.PlayClipAtPoint(messageSound, transform.position);
+        }
+
         isTutorialActive = true;
     }
 
     private void UnfreezeGame()
     {
+        // Przywrócenie czasu
         Time.timeScale = 1f;
+        Time.fixedDeltaTime = 0.02f;
 
+        // Ukrycie komunikatu
         tutorialDisplay.gameObject.SetActive(false);
+
+        // Przywrócenie fizyki i ruchu
+        if (playerRigidbody != null)
+        {
+            playerRigidbody.isKinematic = false;
+            playerRigidbody.linearVelocity = savedVelocity;
+            playerRigidbody.angularVelocity = savedAngularVelocity;
+        }
 
         if (playerMovement != null)
         {
             playerMovement.enabled = true;
         }
-        
+
         isTutorialActive = false;
-        
+
+        // Dezaktywacja triggera aby nie wywoływał się ponownie
         gameObject.SetActive(false);
+    }
+
+    // Dodatkowe zabezpieczenie na wypadek wyłączenia skryptu
+    private void OnDisable()
+    {
+        if (isTutorialActive)
+        {
+            UnfreezeGame();
+        }
     }
 }
