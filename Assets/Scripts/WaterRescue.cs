@@ -3,12 +3,20 @@ using UnityEngine.Tilemaps;
 
 public class WaterRescue : MonoBehaviour
 {
+    [SerializeField] private HealthSystem healthSystem;
+    
     [Header("Ustawienia")]
     public Tilemap groundTilemap;
-    public float checkDistance = 3f; // Zmniejszony dystans
-    public float edgeOffset = 0.3f;  // Mniejszy offset
+    public float checkDistance = 3f;
+    public float edgeOffset = 0.3f;
     public Vector2 raycastOffset = new Vector2(0, -0.3f);
-
+    
+    private void Awake()
+    {
+        if (healthSystem is null)
+            healthSystem = GetComponent<HealthSystem>();
+    }
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -18,7 +26,7 @@ public class WaterRescue : MonoBehaviour
             {
                 other.transform.position = rescuePos;
                 ResetPlayerVelocity(other);
-                Debug.Log("Gracz uratowany na pozycji: " + rescuePos);
+                healthSystem.TakeDamage(1);
             }
         }
     }
@@ -27,11 +35,9 @@ public class WaterRescue : MonoBehaviour
     {
         Vector2 checkOrigin = (Vector2)playerPos + raycastOffset;
         
-        // Szukaj najpierw w lewo (krótszy dystans)
         Vector2 leftPos = CheckDirection(checkOrigin, Vector2.left, checkDistance);
         if(leftPos != Vector2.zero) return leftPos;
 
-        // Jeśli nie ma miejsca po lewej, szukaj dalej
         return CheckDirection(checkOrigin, Vector2.right, checkDistance * 1.5f);
     }
 
