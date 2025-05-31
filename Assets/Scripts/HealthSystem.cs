@@ -5,7 +5,7 @@ public class HealthSystem : MonoBehaviour
 {
     [Header("Health Settings")]
     [SerializeField] public int currentHealth;
-    [SerializeField] private int maxHealth = 10;
+    [SerializeField] public int maxHealth = 10;
     [SerializeField] private Image[] hearts;
     [SerializeField] private Sprite fullHeart;
     [SerializeField] private Sprite emptyHeart;
@@ -37,6 +37,13 @@ public class HealthSystem : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(healthDecreaseSound, Camera.main.transform.position);
         }
+    }
+    
+    public void AddHeart()
+    {
+        currentHealth += 1;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        UpdateHearts();
     }
 
     private void UpdateHearts()
