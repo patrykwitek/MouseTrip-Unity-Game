@@ -77,14 +77,11 @@ public class TutorialTrigger : MonoBehaviour
 
     private void UnfreezeGame()
     {
-        // Przywrócenie czasu
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
-
-        // Ukrycie komunikatu
+        
         tutorialDisplay.gameObject.SetActive(false);
-
-        // Przywrócenie fizyki i ruchu
+        
         if (playerRigidbody != null)
         {
             playerRigidbody.isKinematic = false;
@@ -98,12 +95,10 @@ public class TutorialTrigger : MonoBehaviour
         }
 
         isTutorialActive = false;
-
-        // Dezaktywacja triggera aby nie wywoływał się ponownie
+        
         gameObject.SetActive(false);
     }
-
-    // Dodatkowe zabezpieczenie na wypadek wyłączenia skryptu
+    
     private void OnDisable()
     {
         if (isTutorialActive)
