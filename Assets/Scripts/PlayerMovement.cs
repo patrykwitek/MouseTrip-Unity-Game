@@ -1,74 +1,59 @@
-using System;
-using System.Collections;
-using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Movement settings
-    [Header("Movement settings")]
-    [SerializeField] public float maxSpeed;
+    [Header("Movement settings")] [SerializeField]
+    public float maxSpeed;
+
     [SerializeField] private float accelerationForce;
     [SerializeField] private float jumpForce;
-    
+    [SerializeField] private float ladderClimbSpeed = 3f;
+    [SerializeField] private float ladderSlideSpeed = 1f;
+
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
     private int maxJumps;
     private int jumpsLeft;
+    
+    public bool isClimbing = false;
+    private float originalGravityScale;
+
     void Start()
     {
-        // player stats
         maxSpeed = 3f;
         accelerationForce = 4f;
         jumpForce = 15f;
-        // physics setup
+
         rb = GetComponent<Rigidbody2D>();
         rb.mass = 2f;
         rb.linearDamping = 3f;
         rb.freezeRotation = true;
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb.gravityScale = 1.5f;
-        //movement
+        originalGravityScale = rb.gravityScale;
+
         maxJumps = 2;
         jumpsLeft = maxJumps;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // get inputs
         float moveHorizontal = Input.GetAxis("Horizontal");
 
-        // if player's speed is less than the max speed allowed
-        if (rb.linearVelocity.magnitude < maxSpeed && (moveHorizontal > 0.25 || moveHorizontal < -0.25))
+        if (isClimbing)
         {
-            //set the player vector
-            Vector2 force = new Vector2(moveHorizontal, 0).normalized * accelerationForce;
-            
-            //move player
-            rb.AddForce(force);
+            HandleLadderMovement();
+        }
+        else
+        {
+            HandleNormalMovement(moveHorizontal);
         }
 
-        if (rb.linearVelocity[1] == 0.0f)
+        if (!isClimbing)
         {
-            jumpsLeft = maxJumps;
+            HandleJumping();
         }
-        // jumping
-        if (Input.GetButtonDown("Jump") && jumpsLeft > 0)
-        {
-            if (jumpsLeft == maxJumps)
-            {
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            }
-            else
-            {
-                rb.AddForce(Vector2.up * (jumpForce * 0.9f), ForceMode2D.Impulse);
-            }
-            jumpsLeft--;
-        }
-        
-        
-        // Turn the character based on his direction of movement
+
         if (moveHorizontal < 0.0f)
         {
             spriteRenderer.flipX = true;
@@ -79,4 +64,65 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void HandleNormalMovement(float moveHorizontal)
+    {
+        if (rb.linearVelocity.magnitude < maxSpeed && Mathf.Abs(moveHorizontal) > 0.25f)
+        {
+            Vector2 force = new Vector2(moveHorizontal, 0).normalized * accelerationForce;
+            rb.AddForce(force);
+        }
+    }
+
+    private void HandleLadderMovement()
+    {
+        float verticalInput = Input.GetAxis("Vertical");
+        
+        if (verticalInput > 0.1f) // Wchodzenie w górę
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.5f, ladderClimbSpeed);
+        }
+        else if (verticalInput < -0.1f) // Celowe schodzenie w dół
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.5f, -ladderClimbSpeed);
+        }
+        else // Powolne zjeżdżanie
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.5f, -ladderSlideSpeed);
+        }
+
+        // Zejście z drabiny spacją
+        if (Input.GetButtonDown("Jump"))
+        {
+            StopClimbing();
+            rb.AddForce(Vector2.up * 2f, ForceMode2D.Impulse);
+        }
+    }
+
+    private void HandleJumping()
+    {
+        if (rb.linearVelocity.y == 0.0f)
+        {
+            jumpsLeft = maxJumps;
+        }
+
+        if (Input.GetButtonDown("Jump") && jumpsLeft > 0)
+        {
+            float currentJumpForce = jumpsLeft == maxJumps ? jumpForce : jumpForce * 0.9f;
+            rb.AddForce(Vector2.up * currentJumpForce, ForceMode2D.Impulse);
+            jumpsLeft--;
+        }
+    }
+
+    public void StartClimbing()
+    {
+        isClimbing = true;
+        rb.gravityScale = 0;
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.3f, 0);
+    }
+
+    public void StopClimbing()
+    {
+        isClimbing = false;
+        rb.gravityScale = originalGravityScale;
+    }
 }
