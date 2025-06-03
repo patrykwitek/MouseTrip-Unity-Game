@@ -46,24 +46,21 @@ public class TutorialTrigger : MonoBehaviour
 
     private void FreezeGame()
     {
-        // Zapisanie aktualnej prędkości przed zatrzymaniem
         if (playerRigidbody != null)
         {
             savedVelocity = playerRigidbody.linearVelocity;
             savedAngularVelocity = playerRigidbody.angularVelocity;
             playerRigidbody.isKinematic = true;
         }
-
-        // Zatrzymanie czasu i inputu
+        
         Time.timeScale = freezeTimeScale;
-        Time.fixedDeltaTime = 0.02f * Time.timeScale; // ważne dla fizyki
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
 
         if (playerMovement != null)
         {
             playerMovement.enabled = false;
         }
-
-        // Wyświetlenie komunikatu
+        
         tutorialDisplay.sprite = tutorialImage;
         tutorialDisplay.gameObject.SetActive(true);
 
