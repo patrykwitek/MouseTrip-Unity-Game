@@ -17,8 +17,10 @@ public class PasswordTrigger : MonoBehaviour
     [Header("Object To Disappear")]
     [SerializeField] private GameObject objectToDisable;
 
-    private Transform player;
+    private Transform playerTransform;
     private bool isInRange = false;
+    
+    public GameObject player;
 
     private PlayerMovement playerMovement;
     private Rigidbody2D playerRigidbody;
@@ -29,17 +31,23 @@ public class PasswordTrigger : MonoBehaviour
     
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         
         if (passwordPanel != null) passwordPanel.SetActive(false);
         if (submitButton != null) submitButton.onClick.AddListener(CheckPassword);
+        
+        if (player != null)
+        {
+            playerMovement = player.GetComponent<PlayerMovement>();
+            playerRigidbody = player.GetComponent<Rigidbody2D>();
+        }
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (playerTransform == null) return;
         
-        float distance = Vector3.Distance(transform.position, player.position);
+        float distance = Vector3.Distance(transform.position, playerTransform.position);
         bool nowInRange = distance <= interactionDistance;
         
         if (nowInRange != isInRange)

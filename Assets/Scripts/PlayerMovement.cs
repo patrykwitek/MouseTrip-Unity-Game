@@ -17,6 +17,12 @@ public class PlayerMovement : MonoBehaviour
     
     public bool isClimbing = false;
     private float originalGravityScale;
+    
+    [Header("Ice Movement")]
+    [SerializeField] private float iceControlReduction = 0.3f;
+    
+    private float originalFriction;
+    private bool isOnIce = false;
 
     void Start()
     {
@@ -34,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
 
         maxJumps = 2;
         jumpsLeft = maxJumps;
+        
+        originalFriction = rb.linearDamping;
     }
 
     void Update()
@@ -53,6 +61,11 @@ public class PlayerMovement : MonoBehaviour
         {
             HandleJumping();
         }
+        
+        if (isOnIce)
+        {
+            moveHorizontal *= iceControlReduction;
+        }
 
         if (moveHorizontal < 0.0f)
         {
@@ -62,6 +75,18 @@ public class PlayerMovement : MonoBehaviour
         {
             spriteRenderer.flipX = false;
         }
+    }
+    
+    public void SetIceFriction(float friction)
+    {
+        isOnIce = true;
+        rb.linearDamping = friction;
+    }
+
+    public void ResetIceFriction()
+    {
+        isOnIce = false;
+        rb.linearDamping = originalFriction;
     }
 
     private void HandleNormalMovement(float moveHorizontal)
@@ -77,20 +102,19 @@ public class PlayerMovement : MonoBehaviour
     {
         float verticalInput = Input.GetAxis("Vertical");
         
-        if (verticalInput > 0.1f) // Wchodzenie w górę
+        if (verticalInput > 0.1f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.5f, ladderClimbSpeed);
         }
-        else if (verticalInput < -0.1f) // Celowe schodzenie w dół
+        else if (verticalInput < -0.1f)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.5f, -ladderClimbSpeed);
         }
-        else // Powolne zjeżdżanie
+        else
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x * 0.5f, -ladderSlideSpeed);
         }
-
-        // Zejście z drabiny spacją
+        
         if (Input.GetButtonDown("Jump"))
         {
             StopClimbing();
