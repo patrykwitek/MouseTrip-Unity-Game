@@ -7,8 +7,8 @@ public class PointsManager : MonoBehaviour
     public static PointsManager Instance;
     
     [SerializeField] private TextMeshProUGUI  counterText;
-    private int totalCollectibles;
-    private int collectedCount;
+    public int totalCollectibles;
+    public int collectedCount;
     
     private void Awake()
     {
@@ -35,6 +35,11 @@ public class PointsManager : MonoBehaviour
     {
         totalCollectibles += amount;
         UpdateCounter();
+    }
+
+    public void ResetCounter()
+    {
+        collectedCount = 0;
     }
     
     private void UpdateCounter()
