@@ -8,7 +8,7 @@ public class WaterRescue : MonoBehaviour
     [Header("Ustawienia")]
     public Tilemap groundTilemap;
     public float checkDistance = 3f;
-    public float edgeOffset = 0.3f;
+    public float edgeOffset = 0.2f;
     public Vector2 raycastOffset = new Vector2(0, -0.3f);
     
     private void Awake()
