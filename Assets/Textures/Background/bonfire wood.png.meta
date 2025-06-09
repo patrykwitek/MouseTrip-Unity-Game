@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bonfire wood_0: 5647914629535712236
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

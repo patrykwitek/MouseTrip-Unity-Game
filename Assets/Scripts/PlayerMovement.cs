@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement settings")] [SerializeField]
-    public float maxSpeed;
+    public float maxSpeed = 20f;
 
-    [SerializeField] private float accelerationForce;
+    [SerializeField] private float accelerationForce = 9f;
     [SerializeField] private float jumpForce;
     [SerializeField] private float ladderClimbSpeed = 3f;
     [SerializeField] private float ladderSlideSpeed = 1f;
@@ -26,8 +26,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        maxSpeed = 14f;
-        accelerationForce = 5f;
+        // maxSpeed = 14f;
+        // accelerationForce = 5f;
         jumpForce = 15f;
 
         rb = GetComponent<Rigidbody2D>();

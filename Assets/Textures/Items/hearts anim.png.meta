@@ -459,7 +459,21 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      hearts anim_0: 6526110115828348941
+      hearts anim_1: -4199472553664415790
+      hearts anim_10: -2905266316235706356
+      hearts anim_11: -1197134173273518918
+      hearts anim_12: -5138723648983207433
+      hearts anim_13: 6382725524912706430
+      hearts anim_2: -1382579090148065346
+      hearts anim_3: -8315787372627432241
+      hearts anim_4: -4039016354260021657
+      hearts anim_5: 5619692129015938962
+      hearts anim_6: 4330509902558564694
+      hearts anim_7: 4103011067107065515
+      hearts anim_8: -1969085214505911132
+      hearts anim_9: -6402394665261137650
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
