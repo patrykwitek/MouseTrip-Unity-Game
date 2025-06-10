@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
@@ -12,7 +13,8 @@ public class HealthSystem : MonoBehaviour
     
     [Header("Death Settings")]
     [SerializeField] private GameObject objectToMoveOnDeath;
-    [SerializeField] private Vector2 deathPosition = new Vector2(12f, 6f);
+    // [SerializeField] private Vector2 deathPosition = new Vector2(12f, 6f);
+    [SerializeField] private DeathTrigger myTrigger;
     [SerializeField] private float respawnDelay = 1f;
     [SerializeField] private AudioClip deathSound;
     [SerializeField] private AudioClip healthDecreaseSound;
@@ -68,9 +70,10 @@ public class HealthSystem : MonoBehaviour
     
     private void MoveObject()
     {
-        objectToMoveOnDeath.transform.position = deathPosition;
-        
-        currentHealth = maxHealth;
-        UpdateHearts();
+        myTrigger.Death();
+        // objectToMoveOnDeath.transform.position = deathPosition;
+        //
+        // currentHealth = maxHealth;
+        // UpdateHearts();
     }
 }

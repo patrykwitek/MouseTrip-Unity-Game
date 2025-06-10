@@ -10,8 +10,10 @@ public class PointsManager : MonoBehaviour
     public int totalCollectibles;
     public int collectedCount;
     
+
     private void Awake()
     {
+        // DontDestroyOnLoad(this.gameObject);
         if (Instance is null)
         {
             Instance = this;
