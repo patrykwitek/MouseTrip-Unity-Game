@@ -91,22 +91,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleNormalMovement(float moveHorizontal)
     {
-        // old code
-        // if (rb.linearVelocity.magnitude < maxSpeed && Mathf.Abs(moveHorizontal) > 0.25f)
-        // {
-        //     Vector2 force = new Vector2(moveHorizontal, 0).normalized * accelerationForce;
-        //     rb.AddForce(force);
-        // }
-        
-        if (Mathf.Abs(moveHorizontal) > 0.1f)
+        if (rb.linearVelocity.magnitude < maxSpeed && Mathf.Abs(moveHorizontal) > 0.25f)
         {
-            Vector2 force = new Vector2(moveHorizontal, 0) * accelerationForce;
+            Vector2 force = new Vector2(moveHorizontal, 0).normalized * accelerationForce;
             rb.AddForce(force);
         }
-
-        Vector2 clampedVelocity = rb.linearVelocity;
-        clampedVelocity.x = Mathf.Clamp(clampedVelocity.x, -maxSpeed, maxSpeed);
-        rb.linearVelocity = clampedVelocity;
     }
 
     private void HandleLadderMovement()
