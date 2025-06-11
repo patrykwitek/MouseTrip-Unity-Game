@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      snow flake_0: 5403122992691683814
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
